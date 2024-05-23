@@ -1,12 +1,14 @@
 import { Controller, Get, Put, Param, Body, Delete, Post } from '@nestjs/common';
+
 import { BooksService } from './books.service';
+import type { Book } from '../types/books';
 
 @Controller('books')
 export class BooksController {
   constructor(private readonly bookService: BooksService) {}
 
   @Post()
-  async createBook(@Body() book: any) {
+  async createBook(@Body() book: Book) {
     return await this.bookService.createBook(book);
   }
 
