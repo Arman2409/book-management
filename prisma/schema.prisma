@@ -18,7 +18,6 @@ model Books {
   title         String    @unique
   isbn          String?   @unique
   publishedDate DateTime?
-  author        Author    @relation(fields: [authorId], references: [id])
   authorId      Int
 }
 
@@ -26,5 +25,4 @@ model Author {
   id    Int     @id @default(autoincrement())
   name  String  @unique
   email String? @unique
-  Books Books[]
 }

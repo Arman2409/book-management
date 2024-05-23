@@ -1,46 +1,80 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/_services/prisma.service';
+import { HttpCode, HttpException, HttpStatus, Injectable } from '@nestjs/common';
+
+import { PrismaService } from '../_services/prisma.service';
+import { BooksValidationService } from './validation/bookValidation.service';
+import type { Book, CreateBookBody } from '../types/books';
 
 @Injectable()
 export class BooksService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService,
+    private readonly validationService: BooksValidationService
+  ) { }
 
-  async createBook(book: any): Promise<Book> {
-    return await this.prisma.books.create({ data: book });
-  }
-
-  async getBook(id: number): Promise<Book | undefined> {
-    return await this.prisma.books.findUnique({ where: { id }, include: { author: true } }); // Include author relation
-  }
-
-  async getAllBooks(): Promise<Book[]> {
-    return await this.prisma.books.findMany({ include: { author: true } }); // Include author relation
-  }
-
-  async updateBook(id: number, book: any): Promise<Book | undefined> {
-    return await this.prisma.books.update({
-      where: { id },
-      data: book,
+  @HttpCode(HttpStatus.CREATED)
+  async createBook(bookData: CreateBookBody): Promise<Book> {
+    this.validationService.validateBookData(bookData, "create");
+    
+    const authorExists = await this.prisma.author.findUnique({
+      where: { id: bookData.authorId }
+    })
+    if(!authorExists) {
+      throw new HttpException("Author not found", HttpStatus.NOT_FOUND);
+    }
+    return await this.prisma.books.create({
+      data: bookData
     });
   }
 
-  async deleteBook(id: number): Promise<void> {
-    await this.prisma.books.delete({ where: { id } });
+  @HttpCode(HttpStatus.OK)
+  async getBook(id: number): Promise<Book> {
+    if(!id) {
+      throw new HttpException("Id not provided", HttpStatus.BAD_REQUEST);
+    }
+    const book = await this.prisma.books.findUnique({ where: { id: Number(id) }});
+    if(!book) {
+      throw new HttpException("Book not found", HttpStatus.NOT_FOUND);
+    }
+    return book;
   }
-}
 
-// Interface for Book data (optional)
-export interface Book {
-  id: number;
-  title: string;
-  isbn?: string;
-  publishedDate?: Date;
-  author?: Author;
-}
+  @HttpCode(HttpStatus.OK)
+  async getAllBooks(): Promise<Book[]> {
+    const allBooks = await this.prisma.books.findMany(); // Include author relation
+    if(allBooks) {
+      return allBooks;
+    }
+  }
 
-export interface Author {
-  id: number;
-  name: string;
-  biography?: string;
-  dateOfBirth?: Date;
+  @HttpCode(HttpStatus.OK)
+  async updateBook(id: number, bookData: CreateBookBody): Promise<Book | undefined> { 
+    this.validationService.validateBookData(bookData, "update");
+    const allowedKeys = ["title", "isbn", "authorId"];
+
+    // Create a new object to store filtered values
+    const newBook = {};
+    
+    // Loop through allowed keys
+    for (const key of allowedKeys) {
+      // Check if the key exists in the original object
+      if (bookData.hasOwnProperty(key)) {
+        newBook[key] = bookData[key];
+      }
+    }
+    return await this.prisma.books.update({
+      where: { id },
+      data: newBook,
+    });
+  }
+
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deleteBook(id: number): Promise<void> {
+    if(!id) {
+      throw new HttpException("Invalid Id provided", HttpStatus.BAD_REQUEST);
+    }
+    await this.prisma.books.delete(
+      { where: { id: Number(id) } }
+    ).catch(() => {
+       throw new HttpException("Book not found for deletion", HttpStatus.NOT_FOUND);
+    })
+  }
 }
