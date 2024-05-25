@@ -1,8 +1,17 @@
-import { Controller, Get, Put, Param, Body, Delete, Post, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Put,
+  Param,
+  Body,
+  Delete,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 
-import { AuthGuard } from '../../src/auth/auth.guard';
+import { AuthGuard } from '../auth/auth.guard';
 import { BooksService } from './books.service';
-import type { Book } from '../../types/books';
+import type { Book } from '../../../types/books';
 
 @UseGuards(AuthGuard)
 @Controller('books')
@@ -23,7 +32,7 @@ export class BooksController {
   async createBook(@Body() book: Book) {
     return await this.bookService.createBook(book);
   }
-  
+
   @Put(':id')
   async updateBook(@Param('id') id: number, @Body() book: any) {
     return await this.bookService.updateBook(id, book);

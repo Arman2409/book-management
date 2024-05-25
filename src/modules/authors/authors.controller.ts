@@ -1,8 +1,17 @@
-import { Controller, Get, Put, Param, Body, Delete, Post, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Put,
+  Param,
+  Body,
+  Delete,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 
 import { AuthGuard } from '../auth/auth.guard';
-import { AuthorsService } from './authors.service'; 
-import type { Author } from '../../types/authors';
+import { AuthorsService } from './authors.service';
+import type { Author } from '../../../types/authors';
 
 @UseGuards(AuthGuard)
 @Controller('authors')
@@ -14,19 +23,21 @@ export class AuthorsController {
     return await this.authorsService.getAllAuthors();
   }
 
-
   @Get(':id')
   async getAuthor(@Param('id') id: number): Promise<Author | null> {
     return await this.authorsService.getAuthor(id);
   }
-  
+
   @Post()
   async createAuthor(@Body() author: Author) {
     return await this.authorsService.createAuthor(author);
   }
 
   @Put(':id')
-  async updateAuthor(@Param('id') id: number, @Body() author: Author): Promise<Author | null> {
+  async updateAuthor(
+    @Param('id') id: number,
+    @Body() author: Author,
+  ): Promise<Author | null> {
     return await this.authorsService.updateAuthor(id, author);
   }
 

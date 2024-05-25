@@ -1,46 +1,47 @@
-import { Test, TestingModule } from "@nestjs/testing";
+import { Test, TestingModule } from '@nestjs/testing';
 
-import { PrismaService } from "../../src/tools/prisma.service";
-import { CustomLogger } from '../../src/tools/logger.service';
-import { AuthorsService } from "../../src/authors/authors.service";
-import { AuthorsValidationService } from "../../src/authors/validation/authorValidation.service";
-import type { Author, CreateAuthorBody } from "../../types/authors";
+import { PrismaService } from '../../src/tools/services/prisma.service';
+import { CustomLogger } from '../../src/tools/services/logger.service';
+import { AuthorsService } from '../../src/modules/authors/authors.service';
+import { AuthorsValidationService } from '../../src/modules/authors/validation/authorValidation.service';
+import { testAuthorData, testAuthorUpdateData } from './data';
+import type { CreateAuthorBody } from '../../types/authors';
 
-describe("Update book", () => {
-    let service: AuthorsService;
-    let prisma: PrismaService;
+describe('Update Author', () => {
+  let service: AuthorsService;
+  let prisma: PrismaService;
 
-    beforeEach(async () => {
-        const module: TestingModule = await Test.createTestingModule({
-            providers: [AuthorsService, PrismaService, AuthorsValidationService, CustomLogger],
-        }).compile();
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        AuthorsService,
+        PrismaService,
+        AuthorsValidationService,
+        CustomLogger,
+      ],
+    }).compile();
 
-        service = module.get<AuthorsService>(AuthorsService);
-        prisma = module.get<PrismaService>(PrismaService);
-    });
+    service = module.get<AuthorsService>(AuthorsService);
+    prisma = module.get<PrismaService>(PrismaService);
+  });
 
-    it('should throw error if empty object provided', async () => {
-        expect(service.updateAuthor(1111111111, {} as CreateAuthorBody)).rejects.toThrow("At least one of name, biography, dateOfBirth is required");
-    });
+  it('should throw error if empty object provided', async () => {
+    expect(
+      service.updateAuthor(1111111111, {} as CreateAuthorBody),
+    ).rejects.toThrow(
+      'At least one of name, biography, dateOfBirth is required',
+    );
+  });
 
-    it('should update the book', async () => {
-       const updateData = {
-            name: "Victor Hugo",
-            biography: "Victor Hugo was a French poet, novelist, and dramatist of the Romantic movement.",
-            birthDate: new Date('1802-02-26'),
-       }
+  it('should update the book', async () => {
+    // Mock Prisma methods (replace with actual implementation)
+    jest.spyOn(prisma.authors, 'update').mockResolvedValueOnce(testAuthorData);
 
-        const expectedAutor:Author = {
-            id: 111111111111,
-            ...updateData,
-        };
+    const updateBookResult = await service.updateAuthor(
+      1111111111,
+      testAuthorUpdateData,
+    );
 
-
-        // Mock Prisma methods (replace with actual implementation)
-        jest.spyOn(prisma.authors, 'update').mockResolvedValueOnce(expectedAutor);
-
-        const updateBookResult = await service.updateAuthor(1111111111, updateData);
-
-        expect(updateBookResult).toStrictEqual(updateBookResult);
-    });
-})
+    expect(updateBookResult).toStrictEqual(testAuthorData);
+  });
+});
