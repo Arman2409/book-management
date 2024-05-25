@@ -48,7 +48,7 @@ export class BooksService {
   @HttpCode(HttpStatus.OK)
   async updateBook(id: number, bookData: UpdateBookBody): Promise<Book | undefined> { 
     this.validationService.validateBookData(bookData, "update");
-    const allowedKeys = ["title", "isbn", "authorId"];
+    const allowedKeys = ["title", "isbn", "authorId", "publishedDate"];
 
     // Create a new object to store filtered values
     const newBook = {};
