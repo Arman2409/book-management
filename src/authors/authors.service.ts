@@ -1,8 +1,8 @@
 import { HttpCode, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 
 import { PrismaService } from '../tools/prisma.service';
-import handleErrorResponse from '../tools/handleErrorResponse';
 import { CustomLogger } from '../tools/logger.service';
+import handleErrorResponse from '../tools/handleErrorResponse';
 import { AuthorsValidationService } from './validation/authorValidation.service';
 import type { Author, CreateAuthorBody, UpdateAuthorBody } from '../../types/authors';
 
@@ -41,6 +41,8 @@ export class AuthorsService {
     @HttpCode(HttpStatus.CREATED)
     async createAuthor(authorData: CreateAuthorBody): Promise<Author> {
         try {
+            console.log("here");
+            
             this.validationService.validateBookData(authorData, "create");
             return await this.prisma.authors.create({ data: authorData })
         } catch (error) {
