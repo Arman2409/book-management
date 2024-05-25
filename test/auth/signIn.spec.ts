@@ -2,8 +2,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { JwtService } from '@nestjs/jwt';
 import { hash } from 'bcrypt';
 
+import { CustomLogger } from '../../src/tools/logger.service';
+import { PrismaService } from '../../src/tools/prisma.service';
 import { AuthService } from '../../src/auth/auth.service';
-import { PrismaService } from '../../src/_services/prisma.service';
 import { AuthValidationService } from '../../src/auth/validation/authValidation.service';
 
 describe("Sign In", () => {
@@ -12,7 +13,7 @@ describe("Sign In", () => {
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
-            providers: [AuthService, PrismaService, AuthValidationService, JwtService], // Include both services
+            providers: [AuthService, PrismaService, AuthValidationService, JwtService, CustomLogger], // Include both services
         }).compile();
 
         service = module.get<AuthService>(AuthService);

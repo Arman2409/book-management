@@ -1,8 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { JwtService } from '@nestjs/jwt';
 
+import { CustomLogger } from '../../src/tools/logger.service';
+import { PrismaService } from '../../src/tools/prisma.service';
 import { AuthService } from '../../src/auth/auth.service';
-import { PrismaService } from '../../src/_services/prisma.service';
 import { AuthValidationService } from '../../src/auth/validation/authValidation.service';
 import type { SignUpBody } from '../../types/auth';
 
@@ -12,7 +13,7 @@ describe("Sign Up", () => {
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
-            providers: [AuthService, PrismaService, AuthValidationService, JwtService], // Include both services
+            providers: [AuthService, PrismaService, AuthValidationService, JwtService, CustomLogger],
         }).compile();
 
         service = module.get<AuthService>(AuthService);

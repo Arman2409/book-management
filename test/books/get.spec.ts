@@ -1,6 +1,7 @@
 import { Test, TestingModule } from "@nestjs/testing";
 
-import { PrismaService } from "../../src/_services/prisma.service";
+import { PrismaService } from "../../src/tools/prisma.service";
+import { CustomLogger } from "../../src/tools/logger.service";
 import { BooksService } from "../../src/books/books.service";
 import { BooksValidationService } from "../../src/books/validation/bookValidation.service";
 import { Book } from "types/books";
@@ -11,7 +12,7 @@ describe("Get Book", () => {
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
-            providers: [BooksService, PrismaService, BooksValidationService], // Include both services
+            providers: [BooksService, PrismaService, BooksValidationService, CustomLogger],
         }).compile();
 
         service = module.get<BooksService>(BooksService);
