@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { HttpException, HttpStatus } from '@nestjs/common';
 
-import { titleMinLength } from '../../../configs/books';
-import validateDateFormat from '../../../helpers/validateDate';
-import type { CreateBookBody, UpdateBookBody } from "../../../types/books";
+import { titleMinLength } from '../../../../configs/books';
+import validateDateFormat from '../../../../helpers/validateDate';
+import type { CreateBookBody, UpdateBookBody } from "../../../../types/books";
 
 @Injectable()
 export class BooksValidationService {

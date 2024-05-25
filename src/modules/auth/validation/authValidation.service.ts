@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 
-import { minPasswordLength } from '../../../configs/auth';
+import { minPasswordLength } from '../../../../configs/auth';
 
 @Injectable()
 export class AuthValidationService {

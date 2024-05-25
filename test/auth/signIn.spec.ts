@@ -2,10 +2,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { JwtService } from '@nestjs/jwt';
 import { hash } from 'bcrypt';
 
-import { CustomLogger } from '../../src/tools/logger.service';
-import { PrismaService } from '../../src/tools/prisma.service';
-import { AuthService } from '../../src/auth/auth.service';
-import { AuthValidationService } from '../../src/auth/validation/authValidation.service';
+import { CustomLogger } from '../../src/tools/services/logger.service';
+import { PrismaService } from '../../src/tools/services/prisma.service';
+import { AuthService } from '../../src/modules/auth/auth.service';
+import { AuthValidationService } from '../../src/modules/auth/validation/authValidation.service';
+import { testSignInData, testSignUpData } from './data';
 
 describe("Sign In", () => {
     let service: AuthService;
@@ -21,20 +22,15 @@ describe("Sign In", () => {
     });
 
     it('should return access token when signing in', async () => {
-        let userData = {
-            email: "johndoes@gmail.com",
-            password: "password123"
-        };
 
         // Mock Prisma methods (replace with actual implementation)
         jest.spyOn(prisma.users, 'findUnique').mockResolvedValueOnce({
-            ...userData,
+            ...testSignUpData,
             id: 1,
-            name: "John Doe",
-            password: await hash("password123", 15)
+            password: await hash(testSignUpData.password, 15)
         })
 
-        const signInResult = await service.signIn(userData);
+        const signInResult = await service.signIn(testSignInData);
 
         expect(signInResult).toHaveProperty("access_token");
     });

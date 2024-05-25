@@ -1,8 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { appendFileSync, existsSync, mkdirSync } from "fs";
 
-import { maxErrorMessageLength } from '../../configs/global';
-import adjustString from '../../helpers/adjustString';
+import { maxErrorMessageLength } from '../../../configs/global';
+import adjustString from '../../../helpers/adjustString';
 
 @Injectable()
 export class CustomLogger {

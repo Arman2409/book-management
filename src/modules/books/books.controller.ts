@@ -1,8 +1,8 @@
 import { Controller, Get, Put, Param, Body, Delete, Post, UseGuards } from '@nestjs/common';
 
-import { AuthGuard } from '../../src/auth/auth.guard';
+import { AuthGuard } from '../auth/auth.guard';
 import { BooksService } from './books.service';
-import type { Book } from '../../types/books';
+import type { Book } from '../../../types/books';
 
 @UseGuards(AuthGuard)
 @Controller('books')

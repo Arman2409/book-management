@@ -2,12 +2,12 @@ import { HttpException, HttpStatus, Injectable, LoggerService } from '@nestjs/co
 import { JwtService } from '@nestjs/jwt';
 import { hash, compareSync } from "bcrypt"
 
-import { bcryptRounds } from '../../configs/auth';
-import { PrismaService } from '../tools/prisma.service';
-import { CustomLogger } from '../tools/logger.service';
-import handleErrorResponse from '../tools/handleErrorResponse';
+import { bcryptRounds } from '../../../configs/auth';
+import { PrismaService } from '../../tools/services/prisma.service';
+import { CustomLogger } from '../../tools/services/logger.service';
+import handleErrorResponse from '../../tools/handleErrorResponse';
 import { AuthValidationService } from './validation/authValidation.service';
-import type { SignInBody, SignUpBody } from '../../types/auth';
+import type { SignInBody, SignUpBody } from '../../../types/auth';
 
 @Injectable()
 export class AuthService {

@@ -1,10 +1,11 @@
 import { Test, TestingModule } from "@nestjs/testing";
 import { Authors } from "@prisma/client";
 
-import { PrismaService } from "../../src/tools/prisma.service";
-import { CustomLogger } from '../../src/tools/logger.service';
-import { BooksService } from "../../src/books/books.service";
-import { BooksValidationService } from "../../src/books/validation/bookValidation.service";
+import { PrismaService } from "../../src/tools/services/prisma.service";
+import { CustomLogger } from '../../src/tools/services/logger.service';
+import { BooksService } from "../../src/modules/books/books.service";
+import { BooksValidationService } from "../../src/modules/books/validation/bookValidation.service";
+import { testBookData, testCreateBookData } from "./data";
 
 describe("Create Book", () => {
     let service: BooksService;
@@ -20,35 +21,19 @@ describe("Create Book", () => {
     });
 
     it('should throw error if author not found', async () => {
-        const newBook = {
-            id: 111111111111,
-            authorId: 111111111111,
-            title: 'Test Book',
-            isbn: '1234567890123',
-            publishedDate: new Date(),
-        };
-
         // Mock Prisma method (replace with actual implementation)
-        jest.spyOn(prisma.books, 'create').mockResolvedValueOnce(newBook);
+        jest.spyOn(prisma.books, 'create').mockResolvedValueOnce(testBookData);
 
-        await expect(service.createBook(newBook)).rejects.toThrow("Author not found");
+        await expect(service.createBook(testCreateBookData)).rejects.toThrow("Author not found");
     });
 
-    it('should create new author', async () => {
-        const newBook = {
-            id: 111111111111,
-            authorId: 111111111111,
-            title: 'Test Book',
-            isbn: '1234567890123',
-            publishedDate: new Date(),
-        };
-
+    it('should create new book', async () => {
         // Mock Prisma methods (replace with actual implementation)
-        jest.spyOn(prisma.books, 'create').mockResolvedValueOnce(newBook);
+        jest.spyOn(prisma.books, 'create').mockResolvedValueOnce(testBookData);
         jest.spyOn(prisma.authors, 'findUnique').mockResolvedValueOnce({} as Authors);
 
-        const createBookResult = await service.createBook(newBook);
+        const createBookResult = await service.createBook(testCreateBookData);
 
-        expect(createBookResult).toStrictEqual(newBook);
+        expect(createBookResult).toStrictEqual(testBookData);
     });
 })

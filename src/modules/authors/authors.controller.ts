@@ -2,7 +2,7 @@ import { Controller, Get, Put, Param, Body, Delete, Post, UseGuards } from '@nes
 
 import { AuthGuard } from '../auth/auth.guard';
 import { AuthorsService } from './authors.service'; 
-import type { Author } from '../../types/authors';
+import type { Author } from '../../../types/authors';
 
 @UseGuards(AuthGuard)
 @Controller('authors')

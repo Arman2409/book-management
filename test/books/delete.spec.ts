@@ -1,9 +1,9 @@
 import { Test, TestingModule } from "@nestjs/testing";
 
-import { PrismaService } from "../../src/tools/prisma.service";
-import { CustomLogger } from '../../src/tools/logger.service';
-import { BooksService } from "../../src/books/books.service";
-import { BooksValidationService } from "../../src/books/validation/bookValidation.service";
+import { PrismaService } from "../../src/tools/services/prisma.service";
+import { CustomLogger } from '../../src/tools/services/logger.service';
+import { BooksService } from "../../src/modules/books/books.service";
+import { BooksValidationService } from "../../src/modules/books/validation/bookValidation.service";
 
 describe("Delete Book", () => {
     let service: BooksService;

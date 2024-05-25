@@ -1,10 +1,10 @@
 import { Test, TestingModule } from "@nestjs/testing";
 
-import { PrismaService } from "../../src/tools/prisma.service";
-import { CustomLogger } from "../../src/tools/logger.service";
-import { BooksService } from "../../src/books/books.service";
-import { BooksValidationService } from "../../src/books/validation/bookValidation.service";
-import { Book } from "types/books";
+import { PrismaService } from "../../src/tools/services/prisma.service";
+import { CustomLogger } from "../../src/tools/services/logger.service";
+import { BooksService } from "../../src/modules/books/books.service";
+import { BooksValidationService } from "../../src/modules/books/validation/bookValidation.service";
+import { testBookData } from "./data";
 
 describe("Get Book", () => {
     let service: BooksService;
@@ -29,18 +29,10 @@ describe("Get Book", () => {
     });
 
     it('should return the book which was found', async () => {
-        const book: Book = {
-            id: 111111111111,
-            authorId: 111111111111,
-            title: 'Test Book',
-            isbn: '1234567890123',
-            publishedDate: new Date(),
-        };
-
         // Mock Prisma method (replace with actual implementation)
-        jest.spyOn(prisma.books, 'findUnique').mockResolvedValueOnce(book);
+        jest.spyOn(prisma.books, 'findUnique').mockResolvedValueOnce(testBookData);
         const findResult = await service.getBook(111111111111);
 
-        expect(findResult).toStrictEqual(book);
+        expect(findResult).toStrictEqual(testBookData);
     });
 })

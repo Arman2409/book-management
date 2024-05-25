@@ -1,10 +1,10 @@
 import { HttpCode, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 
-import { CustomLogger } from '../tools/logger.service';
-import { PrismaService } from '../tools/prisma.service';
-import handleErrorResponse from '../tools/handleErrorResponse';
+import { CustomLogger } from '../../tools/services/logger.service';
+import { PrismaService } from '../../tools/services/prisma.service';
+import handleErrorResponse from '../../tools/handleErrorResponse';
 import { BooksValidationService } from './validation/bookValidation.service';
-import type { Book, CreateBookBody, UpdateBookBody } from '../../types/books';
+import type { Book, CreateBookBody, UpdateBookBody } from '../../../types/books';
 
 @Injectable()
 export class BooksService {

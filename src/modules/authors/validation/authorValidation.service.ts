@@ -1,8 +1,9 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 
-import { biographyMinLength } from '../../../configs/authors';
-import validateDateFormat from '../../../helpers/validateDate';
-import type { CreateAuthorBody, UpdateAuthorBody } from '../../../types/authors';
+import { biographyMinLength } from '../../../../configs/authors';
+import validateDateFormat from '../../../../helpers/validateDate';
+import type { CreateAuthorBody, UpdateAuthorBody } from '../../../../types/authors';
+
 @Injectable()
 export class AuthorsValidationService {
     validateBookData = (

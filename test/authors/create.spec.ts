@@ -1,9 +1,10 @@
 import { Test, TestingModule } from "@nestjs/testing";
 
-import { CustomLogger } from '../../src/tools/logger.service';
-import { PrismaService } from "../../src/tools/prisma.service";
-import { AuthorsService } from "../../src/authors/authors.service";
-import { AuthorsValidationService } from "../../src/authors/validation/authorValidation.service";
+import { CustomLogger } from '../../src/tools/services/logger.service';
+import { PrismaService } from "../../src/tools/services/prisma.service";
+import { AuthorsService } from "../../src/modules/authors/authors.service";
+import { AuthorsValidationService } from "../../src/modules/authors/validation/authorValidation.service";
+import { testAuthorData } from "./data";
 import type { CreateAuthorBody } from "../../types/authors";
 
 describe("Create Author", () => {
@@ -24,18 +25,12 @@ describe("Create Author", () => {
     });
 
     it('should create new author', async () => {
-        const newAuthor = {
-            id: 111111111111,
-            name: "Victor Hugo",
-            biography: "Victor Hugo was a French poet, novelist, and dramatist of the Romantic movement.",
-            birthDate: new Date('1802-02-26'),
-        };
 
         // Mock Prisma methods (replace with actual implementation)
-        jest.spyOn(prisma.authors, 'create').mockResolvedValueOnce(newAuthor);
+        jest.spyOn(prisma.authors, 'create').mockResolvedValueOnce(testAuthorData);
 
-        const createAuthorResult = await service.createAuthor(newAuthor);
+        const createAuthorResult = await service.createAuthor(testAuthorData);
 
-        expect(createAuthorResult).toStrictEqual(newAuthor);
+        expect(createAuthorResult).toStrictEqual(testAuthorData);
     });
 })
