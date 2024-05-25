@@ -1,8 +1,10 @@
-import { Controller, Get, Put, Param, Body, Delete, Post } from '@nestjs/common';
+import { Controller, Get, Put, Param, Body, Delete, Post, UseGuards } from '@nestjs/common';
 
 import { AuthorsService } from './authors.service'; 
+import { AuthGuard } from 'src/auth/auth.guard';
 import type { Author } from '../../types/authors';
 
+@UseGuards(AuthGuard)
 @Controller('authors')
 export class AuthorsController {
   constructor(private readonly authorsService: AuthorsService) {}
