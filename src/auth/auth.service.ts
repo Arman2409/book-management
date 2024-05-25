@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable, LoggerService } from '@nestjs/co
 import { JwtService } from '@nestjs/jwt';
 import { hash, compareSync } from "bcrypt"
 
+import { bcryptRounds } from '../../configs/auth';
 import { PrismaService } from '../tools/prisma.service';
 import { CustomLogger } from '../tools/logger.service';
 import handleErrorResponse from '../tools/handleErrorResponse';
@@ -35,7 +36,7 @@ export class AuthService {
                 data: {
                     email,
                     name,
-                    password: await hash(password, 15)
+                    password: await hash(password, bcryptRounds)
                 }
             });
             const payload = { id: newUser.id };

@@ -1,9 +1,9 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 
+import { minPasswordLength } from '../../../configs/auth';
+
 @Injectable()
 export class AuthValidationService {
-    private readonly minPasswordLength = 8;
-
     private readonly emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
     public validateEmailAndPassword(email: string, password: string): void {
@@ -16,10 +16,10 @@ export class AuthValidationService {
             throw new HttpException("Invalid email", HttpStatus.BAD_REQUEST);
         }
 
-        const isValidPassword = password.length >= this.minPasswordLength && // Minimum length check
+        const isValidPassword = password.length >= minPasswordLength && // Minimum length check
             /[0-9]+/.test(password)    // Contains a number
         if (!isValidPassword) {
-            throw new HttpException(`Password should be at least ${this.minPasswordLength} characters length and include numbers`, HttpStatus.BAD_REQUEST);
+            throw new HttpException(`Password should be at least ${minPasswordLength} characters length and include numbers`, HttpStatus.BAD_REQUEST);
         }
     }
 }

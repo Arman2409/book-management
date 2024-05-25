@@ -9,9 +9,9 @@ import type { Book } from '../../types/books';
 export class BooksController {
   constructor(private readonly bookService: BooksService) {}
 
-  @Post()
-  async createBook(@Body() book: Book) {
-    return await this.bookService.createBook(book);
+  @Get()
+  async getAllBooks() {
+    return await this.bookService.getAllBooks();
   }
 
   @Get(':id')
@@ -19,11 +19,11 @@ export class BooksController {
     return await this.bookService.getBook(id);
   }
 
-  @Get()
-  async getAllBooks() {
-    return await this.bookService.getAllBooks();
+  @Post()
+  async createBook(@Body() book: Book) {
+    return await this.bookService.createBook(book);
   }
-
+  
   @Put(':id')
   async updateBook(@Param('id') id: number, @Body() book: any) {
     return await this.bookService.updateBook(id, book);

@@ -13,11 +13,10 @@ export class AuthorsService {
         private readonly logger: CustomLogger
     ) { }
 
-    @HttpCode(HttpStatus.CREATED)
-    async createAuthor(authorData: CreateAuthorBody): Promise<Author> {
+    @HttpCode(HttpStatus.OK)
+    async getAllAuthors(): Promise<Author[]> {
         try {
-            this.validationService.validateBookData(authorData, "create");
-            return await this.prisma.authors.create({ data: authorData });
+            return await this.prisma.authors.findMany();
         } catch (error) {
             handleErrorResponse(error, this.logger);
         }
@@ -39,10 +38,11 @@ export class AuthorsService {
         }
     }
 
-    @HttpCode(HttpStatus.OK)
-    async getAllAuthors(): Promise<Author[]> {
+    @HttpCode(HttpStatus.CREATED)
+    async createAuthor(authorData: CreateAuthorBody): Promise<Author> {
         try {
-            return await this.prisma.authors.findMany();
+            this.validationService.validateBookData(authorData, "create");
+            return await this.prisma.authors.create({ data: authorData })
         } catch (error) {
             handleErrorResponse(error, this.logger);
         }
