@@ -1,73 +1,149 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# `Book Management`
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This project provides a backend API for managing a library system. 
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Getting Started
 
-## Description
+### Prerequisites
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Git: You need git to clone the project([Install Git](https://git-scm.com/downloads)).
 
-## Installation
+Node.js and npm: These are essential for running the application([Install Node.js](https://nodejs.org/en)).
 
+### Setting up
+
+1. Clone the repository: 
 ```bash
-$ pnpm install
+  git clone https://github.com/Arman2409/book-management.git
+```
+2. Change directory into the project: 
+```bash 
+  cd book-management
+```
+3. Install dependencies: 
+```bash 
+  npm install
+```
+4. Create a .env file in the root directory and add the following environment variables:
+- `PORT`: The port number on which the server will run. Default value is 4000.
+- `DATABASE_URL`: The connection string for your database. Note that you will need to change also the Prisma adapter if you don't use SQLLite
+- `JWT_SECRET`: A secret key used to sign JWT tokens. You can generate a random string using a tool like https://www.random.org/
+5. Generate prisma client
+```bash
+ npm run generate
+```
+6. Migrate database
+```bash
+ npm run migrate
 ```
 
-## Running the app
+### Running the application
 
 ```bash
 # development
-$ pnpm run start
+$ npm run start
 
 # watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
+$ npm run start:dev
 ```
 
-## Test
+### Running test suites
 
 ```bash
 # unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+$ npm run test
 ```
 
-## Support
+## API 
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
-## Stay in touch
+### Authentication Service:
+Endpoints:
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+`Sign In`
 
-## License
+- Method: POST
+- Path: /auth/signin
+- Request Body: Object with two properties 'email' and 'password'
+- Response: Object with 'access_token' property, which is a token created by JWT 
 
-Nest is [MIT licensed](LICENSE).
+`Sign Up`
+
+- Method: POST
+- Path: /auth/signup
+- Request Body: Object with two properties 'name', 'email' and 'password'
+- Response: Object with 'access_token' property, which is a token created by JWT
+
+
+### Books Service
+*** All endpoints of this service need to have 'authorization' header with access token generated by the server ***
+Endpoints:
+
+`Get Book`
+
+- Method: GET
+- Path: /books/:id
+- Response: Book object if found
+
+`Get All Books`
+
+- Method: GET
+- Path: /books
+- Response: Array of Book objects representing all books
+
+`Create Book`
+
+- Method: POST
+- Path: /books
+- Request Body: Object with properties 'title', 'publishedDate', 'authorId' and 'isbn'
+- Response: Created Book object with its newly generated ID
+
+`Update Book`
+
+- Method: PATCH
+- Path: /books/:id
+- Request Body: Object containing at least one of the properties 'title', 'authorId', 'publishedDate' or 'isbn'
+- Response: Updated Book object
+
+`Delete Book`
+
+- Method: DELETE
+- Path: /books/:id
+- Response: Empty
+
+
+### Authors Service
+*** All endpoints of this service need to have 'authorization' header with access token generated by the server ***
+Endpoints:
+
+`Get Author`
+
+- Method: GET
+- Path: /authors/:id
+- Response: Author object if found
+
+`Get All Authors`
+
+- Method: GET
+- Path: /authors
+- Response: Array of Author objects representing all authors
+
+`Update Author`
+
+- Method: PATCH
+- Path: /authors/:id
+- Request Body: Object with at least one of properties 'name', 'biography', 'birthDate'
+- Response: Updated Author object
+
+`Create Author`
+
+- Method: POST
+- Path: /authors 
+- Request Body: Object with properties 'name', 'biography', 'birthDate'
+- Response: Created Author object with its newly generated ID
+
+`Delete Author`
+
+- Method: DELETE
+- Path: /authors/:id
+- Response: Empty

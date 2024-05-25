@@ -1,8 +1,16 @@
 import { NestFactory } from '@nestjs/core';
+
+import { defaultPort } from '../configs/global';
+import { CustomLogger } from './tools/logger.service';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  await app.listen(process.env.PORT || 4000);
+
+  // // Read the port number from environment variables or configuration files
+  const port = process.env.PORT || defaultPort;
+  await app.listen(port, () => {
+    new CustomLogger().info(`Server running on port ${port}`)
+  });
 }
 bootstrap();
