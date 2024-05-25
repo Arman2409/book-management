@@ -7,7 +7,12 @@ import { BooksController } from './books.controller';
 import { BooksValidationService } from './validation/bookValidation.service';
 
 @Module({
-  providers: [BooksService, PrismaService, BooksValidationService, CustomLogger],
-  controllers: [BooksController]
+  providers: [
+    BooksService,
+    PrismaService,
+    BooksValidationService,
+    CustomLogger,
+  ],
+  controllers: [BooksController],
 })
 export class BooksModule {}

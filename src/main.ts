@@ -10,7 +10,7 @@ async function bootstrap() {
   // Read the port number from environment variables or configuration files
   const port = process.env.PORT || defaultPort;
   await app.listen(port, () => {
-    new CustomLogger().info(`Server running on port ${port}`)
+    new CustomLogger().info(`Server running on port ${port}`);
   });
 }
 bootstrap();

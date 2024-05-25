@@ -7,7 +7,12 @@ import { AuthorsService } from './authors.service';
 import { AuthorsController } from './authors.controller';
 
 @Module({
-  providers: [AuthorsService, AuthorsValidationService, PrismaService, CustomLogger],
-  controllers: [AuthorsController]
+  providers: [
+    AuthorsService,
+    AuthorsValidationService,
+    PrismaService,
+    CustomLogger,
+  ],
+  controllers: [AuthorsController],
 })
 export class AuthorsModule {}
