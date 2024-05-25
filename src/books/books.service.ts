@@ -2,7 +2,7 @@ import { HttpCode, HttpException, HttpStatus, Injectable } from '@nestjs/common'
 
 import { PrismaService } from '../_services/prisma.service';
 import { BooksValidationService } from './validation/bookValidation.service';
-import type { Book, CreateBookBody } from '../types/books';
+import type { Book, CreateBookBody, UpdateBookBody } from '../../types/books';
 
 @Injectable()
 export class BooksService {
@@ -14,7 +14,7 @@ export class BooksService {
   async createBook(bookData: CreateBookBody): Promise<Book> {
     this.validationService.validateBookData(bookData, "create");
     
-    const authorExists = await this.prisma.author.findUnique({
+    const authorExists = await this.prisma.authors.findUnique({
       where: { id: bookData.authorId }
     })
     if(!authorExists) {
@@ -46,7 +46,7 @@ export class BooksService {
   }
 
   @HttpCode(HttpStatus.OK)
-  async updateBook(id: number, bookData: CreateBookBody): Promise<Book | undefined> { 
+  async updateBook(id: number, bookData: UpdateBookBody): Promise<Book | undefined> { 
     this.validationService.validateBookData(bookData, "update");
     const allowedKeys = ["title", "isbn", "authorId"];
 
@@ -69,8 +69,9 @@ export class BooksService {
   @HttpCode(HttpStatus.NO_CONTENT)
   async deleteBook(id: number): Promise<void> {
     if(!id) {
-      throw new HttpException("Invalid Id provided", HttpStatus.BAD_REQUEST);
+      throw new HttpException("Invalid id provided", HttpStatus.BAD_REQUEST);
     }
+
     await this.prisma.books.delete(
       { where: { id: Number(id) } }
     ).catch(() => {

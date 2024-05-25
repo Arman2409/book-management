@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { HttpException, HttpStatus } from '@nestjs/common';
 
-import type { CreateBookBody } from "../../types/books";
+import type { CreateBookBody, UpdateBookBody } from "../../../types/books";
 
 @Injectable()
 export class BooksValidationService {
-    validateBookData = ({ authorId, isbn, title, publishedDate }: CreateBookBody, forOperation: "create" | "update") => {
+    validateBookData = ({ authorId, isbn, title, publishedDate }: CreateBookBody | UpdateBookBody, forOperation: "create" | "update") => {
         const missingFields = [];
 
         if (!authorId) missingFields.push('authorId');

@@ -1,9 +1,5 @@
-export interface Book {
+export interface Book extends CreateBookBody {
     id: number;
-    title: string;
-    isbn: string;
-    publishedDate: Date;
-    authorId: number;
 }
 
 export interface CreateBookBody {
@@ -12,3 +8,5 @@ export interface CreateBookBody {
     publishedDate: Date;
     authorId: number;
 }
+
+export interface UpdateBookBody extends Partial<CreateBookBody> {}

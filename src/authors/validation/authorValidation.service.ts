@@ -1,17 +1,18 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import type { CreateAuthorBody } from '../../types/authors';
+
+import type { CreateAuthorBody, UpdateAuthorBody } from '../../../types/authors';
 
 @Injectable()
 export class AuthorsValidationService {
     validateBookData = (
-        { name, biography, dateOfBirth }: CreateAuthorBody,
+        { name, biography, birthDate }: CreateAuthorBody  |UpdateAuthorBody,
         forOperation: "create" | "update"
     ) => {
         const missingFields = [];
 
         if (!name) missingFields.push('name');
         if (!biography) missingFields.push('biography');
-        if (!dateOfBirth) missingFields.push('dateOfBirth');
+        if (!birthDate) missingFields.push('dateOfBirth');
 
         if (forOperation === "create" && missingFields.length > 0) {
             throw new HttpException(`Missing required fields: ${missingFields.join(', ')}`, HttpStatus.BAD_REQUEST);
